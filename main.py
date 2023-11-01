@@ -1,12 +1,10 @@
 # Descripcion
-
-from UI.ventana_madre import *
-import numpy as np
 import matplotlib.pyplot as plt
 import threading, time
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
+from UI.ventana_madre import *
 from models.robot import RobotTrading
 from PyQt5.QtCore import Qt
 
@@ -56,7 +54,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 	def seleccionar_limites_mostrar(self):
 		''' Se cambia los límites de visualización en 7 días, 24h o 1h '''
 
-		self.__rango = self.GrupoBoton_mostrar.checkedButton().text().replace(' ', '').lower()
+		self.__rango = self.GrupoBoton_mostrar\
+			.checkedButton()\
+			.text()\
+			.replace(' ', '')\
+			.lower()
 		try:
 			self.plot()
 		except TypeError:
@@ -108,7 +110,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 			 		'Botón izquierdo desplaza, Botón derecho hace zoom',
 			'Zoom to rectangle\nx/y fixes axis' : 'Zoom in o Zoom out a la selección',
 			'Configure subplots' : 'Configura subplots',
-			'Edit axis, curve and image parameters' : 'Editar ejes, curva y parámetros de imagen',
+			'Edit axis, curve and image parameters' :
+					'Editar ejes, curva y parámetros de imagen',
 			'Save the figure' : 'Guardar figura',
 			'' : ''
 		}
