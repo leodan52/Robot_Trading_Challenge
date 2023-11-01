@@ -29,11 +29,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 		self.figure = plt.figure()
 		self.canvas = FigureCanvas(self.figure)
 		self.toolbar = NavigationToolbar(self.canvas, self)
-		self.toolbar
+		self.traducir_tooltip_toolbar()
 
 		# Agregamos la figura en el layout
 		self.layout_plt.addWidget(self.toolbar)
 		self.layout_plt.addWidget(self.canvas)
+
+		# Creamos un nuevo hilo para el loop de actualización
+
+		self.cronometro = 60
+		self.timer_runs = threading.Event()
+		self.timer_runs.set()
 
 		# Conectamos botones
 		self.GrupoBoton_mostrar.buttonClicked.connect(self.seleccionar_limites_mostrar)
@@ -61,10 +67,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 		self.pushButton_detener.setEnabled(True)
 		self.pushButton_iniciar.setEnabled(False)
-
-		self.cronometro = 60
-		self.timer_runs = threading.Event()
-		self.timer_runs.set()
 
 		t = threading.Thread(target = self.iniciar)
 		t.start()
@@ -94,6 +96,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 			print('Mensaje: Actualización de datos realizada')
 
 			time.sleep(self.cronometro)
+
+
+	def traducir_tooltip_toolbar(self):
+
+		traductor = {
+			'Reset original view' : 'Reiniciar a vista original',
+			'Back to previous view' : 'Ir a vista anterior',
+			'Forward to next view'  : 'Ir a la vista siguiente',
+			'Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect' :
+			 		'Botón izquierdo desplaza, Botón derecho hace zoom',
+			'Zoom to rectangle\nx/y fixes axis' : 'Zoom in o Zoom out a la selección',
+			'Configure subplots' : 'Configura subplots',
+			'Edit axis, curve and image parameters' : 'Editar ejes, curva y parámetros de imagen',
+			'Save the figure' : 'Guardar figura',
+			'' : ''
+		}
+
+		for action in self.toolbar.actions():
+
+			if not action.isSeparator():
+				original = action.toolTip()
+				nuevo = traductor[original]
+
+				action.setToolTip(nuevo)
 
 	def closeEvent(self, event):
 		event.ignore()
