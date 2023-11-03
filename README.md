@@ -20,7 +20,7 @@ Python se trabajó en la versión 3.8.10.
 
 ## Desglose del proyecto
 
-El reto consiste de 5 pasos, cada una encargada de realizar una tarea referente a los datos. El reto consistía en crear una serie de funciones para cada tarea:
+El reto consiste de 5 pasos, cada una encargada de realizar una tarea referente a los datos, creando una serie de funciones:
 
 1. `importar_base_bitcoin()`: Para extraer el historial de los precios del Bitcoin (BTC-USD) de los últimos 7 días en intervalos de 5 minutos, usando `yfinance`.
 2. `extraer_tendencias()`: Para extraer el precio actual y la tendencia del Bitcoin usando Web Scraping del sitio https://coinmarketcap.com/.
