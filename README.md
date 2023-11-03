@@ -16,7 +16,7 @@ El proyecto se realizó usando los siguientes módulos de [Python](https://www.p
 * [requests](https://pypi.org/project/requests/) >= 2.31.0
 * [PyQt5](https://pypi.org/project/PyQt5/) >= 5.14.1
 
-Python se trabajó en la versión 3.8.10.
+Python se trabajó en la versión 3.8.10, y solo fue probado para OS Linux.
 
 ## Desglose del proyecto
 
@@ -29,3 +29,9 @@ El reto consiste de 5 pasos, cada una encargada de realizar una tarea referente 
 5. `visualizacion()`: Para mostrar los datos en una gráfica `lineplot` de `Seaborn`.
 
 En el notebook [Robot_Trading.ipynb](notebook/Robot_Trading.ipynb) se muestra la solución tal como se pedía el Challenge. Sin embargo, se decidió reestructurar el proyecto usando PyQt5 para ejecutarlo desde escritorio con entorno gráfico; **las funciones anteriores pasaron a ser métodos** de la clase [`RobotTrading`](models/robot.py).
+
+## Challenge completado
+
+Mis más sinceros agradecimientos a [Alura Latam](https://www.aluracursos.com/). Este primer Challenge ha sido aprobado, y como muestra he obtenido la Insignia correspondiente.
+
+![Insignia del 1er Challenge del BootCamp para Data Science por Alura latam](assets/images/challenge_1.png)
