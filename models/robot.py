@@ -27,6 +27,7 @@ class RobotTrading:
 		self.__algoritmo_decision = ''
 
 		self.__df_bitcoin_limpio = pd.DataFrame()
+		self.__df_bitcoin_limpio_caja = pd.DataFrame()
 
 	@property
 	def precio_actual(self):
@@ -71,33 +72,38 @@ class RobotTrading:
 		for f in filas:
 			names = f.findAll('p', {'class' : "sc-4984dd93-0 kKpPOn"})
 			actual_prices = f.findAll('div', {'class' : "sc-a0353bbc-0 gDrtaY"})
-			tendencias = f.findAll('span', {'class' : "sc-d55c02b-0 iwhBxy"})
+			tendencias = f.findAll('span', {'class' : "sc-d55c02b-0"})
 
-			dict_datos = RobotTrading.__procesar(names, actual_prices, tendencias)
+			if not (len(names) == 1 and len(actual_prices) == 1 and len(tendencias) == 3):
+				continue
+
+			dict_datos = RobotTrading.__procesar(names[0], actual_prices[0], tendencias)
 
 			if 'Bitcoin' in dict_datos:
 				break
 
 		try:
 			self.__precio_actual = dict_datos['Bitcoin']['precio_actual']
-			self.__tendencia = dict_datos['Bitcoin']['tendencia']
+			self.__tendencia = dict_datos['Bitcoin']['tendencia1h']
 		except KeyError:
 			print('Error al extraer precio actual y tendencia')
 
 	@staticmethod
-	def __procesar(nombres, precio_actual, tendencias) -> dict:
+	def __procesar(nombre, precio_actual, tendencias) -> dict:
 
 		clase_tendencia = {
 			'icon-Caret-down' : 'baja',
 			'icon-Caret-up' : 'alza'
 		}
-		salida = dict()
 
-		for n, pa, t in zip(nombres, precio_actual, tendencias):
-			salida[n.text] = {
-				'precio_actual' : float(re.sub('[$,]', '', pa.text)),
-				'tendencia' : clase_tendencia[t.find('span')['class'][0]]
+		salida = {
+			nombre.text : {
+			'precio_actual' : float(re.sub('[$,]', '', precio_actual.text)),
+			'tendencia1h' : clase_tendencia[tendencias[0].span['class'][0]],
+			'tendencia24h' : clase_tendencia[tendencias[1].span['class'][0]],
+			'tendencia7d' : clase_tendencia[tendencias[2].span['class'][0]]
 			}
+  		}
 
 		return salida
 
@@ -128,8 +134,11 @@ class RobotTrading:
 
 		self.__df_bitcoin_limpio = df_bitcoin_limpio.query('Close >= @min_close & Close <= @max_close')
 
+		# Seleccionar los datos de Close entre Q1 y Q3
+		self.__df_bitcoin_limpio_caja = df_bitcoin_limpio.query('Close >= @Q1 & Close <= @Q3')
+
 		# Promedio de los datos de Close entre Q1 y Q3
-		self.__media_bitcoin = self.__df_bitcoin_limpio.query('Close >= @Q1 & Close <= @Q3').Close.mean()
+		self.__media_bitcoin = self.__df_bitcoin_limpio_caja.Close.mean()
 
 	def tomar_decisiones(self):
 
